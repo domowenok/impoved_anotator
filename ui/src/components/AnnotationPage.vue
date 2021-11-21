@@ -199,9 +199,17 @@ export default {
       if(this.annotations[this.currentIndex] && data[1].entities.length){
         // console.log(data[1].entities.length)
         try {
-          const parameters = data[1].entities[0]
-          this.$store.commit("findClass", parameters[2]);
-          this.tm.addNewBlock(parameters[0], parameters[1], this.targetClass);
+          if (data[1].entities.length === 1){
+            const parameters = data[1].entities[0]
+            this.$store.commit("findClass", parameters[2]);
+            this.tm.addNewBlock(parameters[0], parameters[1], this.targetClass);
+          } else {
+            for (let i = 0; i < data[1].entities.length; i++){
+              const parameters = data[1].entities[i]
+              this.$store.commit("findClass", parameters[2]);
+              this.tm.addNewBlock(parameters[0], parameters[1], this.targetClass);
+            }
+          }
         } catch (e) {
           console.log(e)
         }
