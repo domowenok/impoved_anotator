@@ -1,0 +1,21 @@
+version: "3.8"
+
+services:
+    annotator-server:
+        build:
+            context: ./annotator
+            dockerfile: server.Dockerfile
+        image: annotator-server
+        ports:
+            - "5555:5555"
+
+    annotator-ui:
+        build:
+            context: ./ui
+            dockerfile: ui.Dockerfile
+        image: annotator-ui
+        volumes:
+          - /usr/src/app/ui/node_modules
+          - ./ui:/usr/src/app/ui
+        ports:
+            - "8080:8080"
