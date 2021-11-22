@@ -9,8 +9,56 @@ const niceColors = [
   "#ff9696",
   "#ffd596",
 ];
+export const actions = {
+  continueNotatingJSONFile(context, payload){
+    // prepare data
+    const data = JSON.parse(payload)
+    let text = '';
+    for (let i = 0; i < data.annotations.length; i++){
+      // raw text block part 1
+      text = text + data.annotations[i][0].trim() +  " ";
+      if (i + 1 < data.annotations.length){
+        text += '\n'
+      }
+      // class block
+      if(data.annotations[i][1].entities.length){
+        context.commit('addClass', data.annotations[i][1].entities[0][2])
+        console.dir(data.annotations[i][1].entities[0][2])
+      }
+      // annotation block
+      context.commit('addAnnotation', data.annotations[i]);
+    }
+    // raw text block part 2
+    context.commit('setInputSentences', text)
+    context.state.isJSON = true;
+    // console.dir(data.annotations)
+    //ready text
+    // console.dir(data.annotations[0][0])
+    // ready entities
+    // console.dir(data.annotations[0][1].entities)
+    // ready first entities [0, 1, 2]
+    // console.dir(data.annotations[0][1].entities[0])
+    // console.dir(context.state.classes)
+  }
+}
 
 export const mutations = {
+  // continueNotatingJSONFile(state, payload){
+  //   // prepare data
+  //   const data = JSON.parse(payload)
+  //   //classes
+  //   for (let i = 0; i < data.annotations.length; i++){
+  //
+  //   }
+  //   state.annotations.push(data)
+  //   console.dir(data.annotations)
+  //   //ready text
+  //   console.dir(data.annotations[0][0])
+  //   // ready entities
+  //   console.dir(data.annotations[0][1].entities)
+  //   // ready first entities [0, 1, 2]
+  //   console.dir(data.annotations[0][1].entities[0])
+  // },
   setInputSentences(state, payload) {
     if (!Array.isArray(payload)) {
       state.originalText = payload;
@@ -72,10 +120,11 @@ export default {
       inputSentences: [],
       annotations: [],
       currentClass: {},
-      targetClass: {}
+      targetClass: {},
+      isJSON: false,
     };
   },
   getters,
   mutations,
-  actions: {},
+  actions,
 };

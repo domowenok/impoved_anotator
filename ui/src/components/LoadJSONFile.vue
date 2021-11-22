@@ -6,7 +6,7 @@
           class="file-input"
           type="file"
           name="textfile"
-          accept=".txt"
+          accept=".json"
           @change="onFileSelected"
         />
         <span class="file-cta">
@@ -14,7 +14,7 @@
             <font-awesome-icon icon="file-alt" />
           </span>
           <span class="file-label">
-            Select txt file to start notating
+            Select json file to continue notating
           </span>
         </span>
       </label>
@@ -23,20 +23,20 @@
 </template>
 
 <script>
-import { mapMutations } from "vuex";
+import { mapActions } from "vuex";
 
 export default {
   name: "LoadTextFile",
   emits: ["file-loaded"],
   methods: {
-    ...mapMutations(["setInputSentences"]),
+    ...mapActions(["continueNotatingJSONFile"]),
     onFileSelected(e) {
       let files = e.target.files;
       if (!files.length) return;
 
       let reader = new FileReader();
       reader.addEventListener("load", (event) => {
-        this.setInputSentences(event.target.result);
+        this.continueNotatingJSONFile(event.target.result);
         this.$emit("file-loaded");
       });
       reader.readAsText(files[0]);

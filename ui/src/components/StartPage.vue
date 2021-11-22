@@ -13,7 +13,10 @@
       <div class="container">
         <div class="columns">
           <div class="column">
-            <LoadTextFile class="pt-6" v-on:file-loaded="onFileLoaded" />
+            <LoadTextFile class="pt-6" v-on:file-loaded="onFileLoaded"/>
+          </div>
+          <div class="column">
+            <LoadJSONFile class="pt-6" v-on:file-loaded="onFileLoaded"/>
           </div>
           <div class="column">
             <figure class="image" style="max-height: 15rem;">
@@ -111,12 +114,14 @@ for text, annotations in training_data["annotations"]:
 
 <script>
 import LoadTextFile from "./LoadTextFile";
+import LoadJSONFile from "./LoadJSONFile";
 
 export default {
   name: "StartPage",
   emits: ["file-loaded"],
   components: {
     LoadTextFile,
+    LoadJSONFile
   },
   methods: {
     onFileLoaded() {

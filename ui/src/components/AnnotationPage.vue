@@ -69,7 +69,7 @@ export default {
     ClassesBlock,
   },
   computed: {
-    ...mapState(["inputSentences", "classes", "annotations", "currentClass", 'targetClass']),
+    ...mapState(["inputSentences", "classes", "annotations", "currentClass", 'targetClass', 'isJSON']),
   },
   watch: {
     inputSentences() {
@@ -79,7 +79,10 @@ export default {
 
   },
   created() {
-    if (this.inputSentences.length) {
+    if (this.isJSON){
+      this.restoreAnnotationValues();
+    }
+    else if (this.inputSentences.length) {
       this.tokenizeCurrentSentence();
     }
     document.addEventListener("mouseup", this.selectTokens);
@@ -147,7 +150,6 @@ export default {
     saveTags() {
       try {
         const currentAnnotation = this.annotations[this.currentIndex];
-        console.dir(currentAnnotation)
         if (currentAnnotation.length){
           console.log(1)
           axios
@@ -169,8 +171,6 @@ export default {
             });
           }
       } catch (e) {
-        console.log(e)
-        console.log(3)
         axios
           .post("/detokenize", { tokens: this.tm.words })
           .then((res) => {
@@ -188,6 +188,7 @@ export default {
     },
     goToPreviousSentence(){
       if(this.currentIndex === 0){
+        console.log(this.currentIndex)
         return;
       }
       this.currentIndex = this.currentIndex - 1;
