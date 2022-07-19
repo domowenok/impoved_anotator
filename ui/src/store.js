@@ -14,6 +14,12 @@ export const actions = {
     // prepare data
     const data = JSON.parse(payload)
     let text = '';
+    console.log(1)
+    console.log(data.classes)
+    for(let i = 0; i < data.classes.length; i++){
+      // console.log(data.classes[i])
+      context.commit('addClass', data.classes[i])
+    }
     for (let i = 0; i < data.annotations.length; i++){
       // raw text block part 1
       text = text + data.annotations[i][0].trim() +  " ";
@@ -22,8 +28,8 @@ export const actions = {
       }
       // class block
       if(data.annotations[i][1].entities.length){
-        context.commit('addClass', data.annotations[i][1].entities[0][2])
-        console.dir(data.annotations[i][1].entities[0][2])
+        // context.commit('addClass', data.annotations[i][1].entities[0][2])
+        // console.dir(data.annotations[i][1].entities[0][2])
       }
       // annotation block
       context.commit('addAnnotation', data.annotations[i]);
