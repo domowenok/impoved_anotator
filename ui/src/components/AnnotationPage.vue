@@ -179,7 +179,6 @@ export default {
               { entities: this.tm.exportAsAnnotation() },
             ]);
             this.currentIndex += step;
-            this.tokenizeCurrentSentence();
             this.restoreAnnotationValues();
           })
           .catch((e) => {
