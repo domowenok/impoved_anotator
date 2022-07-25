@@ -27,7 +27,7 @@
               <button class="button" @click = 'goToPreviousSentence' >Go Back</button>
             </p>
             <p class="control">
-              <button class="button is-link" @click="saveTags">Save</button>
+              <button class="button is-link" @click="saveTags(1)">Save</button>
             </p>
             <p class="control">
               <button class="button is-danger is-outlined" @click="resetBlocks">
@@ -147,7 +147,7 @@ export default {
     //   this.currentIndex++;
     //   this.tokenizeCurrentSentence();
     // },
-    saveTags() {
+    saveTags(step) {
       try {
         const currentAnnotation = this.annotations[this.currentIndex];
         if (currentAnnotation.length){
@@ -161,7 +161,7 @@ export default {
               ],
               index: this.currentIndex
             })
-              this.currentIndex = this.currentIndex + 1;
+              this.currentIndex += step;
               this.restoreAnnotationValues()
               return;
             })
@@ -178,8 +178,9 @@ export default {
               res.data.text,
               { entities: this.tm.exportAsAnnotation() },
             ]);
-            this.currentIndex++;
+            this.currentIndex += step;
             this.tokenizeCurrentSentence();
+            this.restoreAnnotationValues();
           })
           .catch((e) => {
             console.log(e);
@@ -191,8 +192,7 @@ export default {
         console.log(this.currentIndex)
         return;
       }
-      this.currentIndex = this.currentIndex - 1;
-      this.restoreAnnotationValues();
+      this.saveTags(-1);
     },
     async restoreAnnotationValues(){
       await this.tokenizeCurrentSentence();
