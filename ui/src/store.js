@@ -90,6 +90,10 @@ export const mutations = {
     }
   },
   removeClass(state, payload) {
+    const answer = window.confirm('Are you sure you want to delete a class?');
+    if (!answer) {
+      return;
+    }
     state.classes = state.classes.filter((c) => c.id != payload);
     if (state.currentClass.id === payload) {
       state.currentClass = state.classes[0];
