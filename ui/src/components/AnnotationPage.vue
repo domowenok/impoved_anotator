@@ -224,6 +224,7 @@ export default {
 </script>
 
 <style lang="scss">
+
 #editor {
   padding: 1rem;
 }

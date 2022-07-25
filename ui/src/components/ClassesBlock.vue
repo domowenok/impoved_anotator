@@ -1,5 +1,5 @@
 <template>
-  <div class="field is-grouped is-grouped-multiline">
+  <div class="field is-grouped is-grouped-multiline" id="class-field">
     <div class="control" v-for="cl in classes" :key="cl.id">
       <div class="tags is-medium has-addons">
         <a
@@ -74,6 +74,7 @@ export default {
 </script>
 
 <style lang="css" scoped>
+
 .color-box {
   width: 1rem;
   height: 1rem;

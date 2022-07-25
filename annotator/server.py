@@ -1,5 +1,5 @@
 import nltk
-
+import os
 from flask import Flask, render_template, request
 from flask_cors import cross_origin
 
@@ -33,4 +33,4 @@ def index():
 
 
 if __name__ == "__main__":
-    app.run(host= "0.0.0.0", port=5555, debug=True)
+    app.run(host= "0.0.0.0", port=os.getenv("PORT"), debug=True)
