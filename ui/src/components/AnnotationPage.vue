@@ -151,39 +151,22 @@ export default {
       try {
         const currentAnnotation = this.annotations[this.currentIndex];
         if (currentAnnotation.length){
-          console.log(1)
-          axios
-            .post("/detokenize", { tokens: this.tm.words })
-            .then((res) => {
-              this.$store.commit("changeAnnotation", { data: [
-                res.data.text,
-                { entities: this.tm.exportAsAnnotation() },
-              ],
-              index: this.currentIndex
-            })
-              this.currentIndex += step;
-              this.restoreAnnotationValues()
-              return;
-            })
-            .catch((e) => {
-              console.log(e);
-              return;
-            });
+          this.$store.commit("changeAnnotation", { data: [
+              this.inputSentences[this.currentIndex].text,
+              { entities: this.tm.exportAsAnnotation() },
+            ],
+            index: this.currentIndex
+          });
+          this.currentIndex += step;
+          this.restoreAnnotationValues()
           }
       } catch (e) {
-        axios
-          .post("/detokenize", { tokens: this.tm.words })
-          .then((res) => {
-            this.$store.commit("addAnnotation", [
-              res.data.text,
-              { entities: this.tm.exportAsAnnotation() },
-            ]);
-            this.currentIndex += step;
-            this.restoreAnnotationValues();
-          })
-          .catch((e) => {
-            console.log(e);
-          });
+        this.$store.commit("addAnnotation", [
+          this.inputSentences[this.currentIndex].text,
+          { entities: this.tm.exportAsAnnotation() },
+        ]);
+        this.currentIndex += step;
+        this.restoreAnnotationValues();
       }
     },
     goToPreviousSentence(){
