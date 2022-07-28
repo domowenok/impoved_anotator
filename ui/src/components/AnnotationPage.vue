@@ -27,7 +27,7 @@
               <button class="button" @click = 'goToPreviousSentence' >Go Back</button>
             </p>
             <p class="control">
-              <button class="button is-link" @click="saveTags">Save</button>
+              <button class="button is-link" @click="saveTags(1)">Save</button>
             </p>
             <p class="control">
               <button class="button is-danger is-outlined" @click="resetBlocks">
@@ -147,43 +147,26 @@ export default {
     //   this.currentIndex++;
     //   this.tokenizeCurrentSentence();
     // },
-    saveTags() {
+    saveTags(step) {
       try {
         const currentAnnotation = this.annotations[this.currentIndex];
         if (currentAnnotation.length){
-          console.log(1)
-          axios
-            .post("/detokenize", { tokens: this.tm.words })
-            .then((res) => {
-              this.$store.commit("changeAnnotation", { data: [
-                res.data.text,
-                { entities: this.tm.exportAsAnnotation() },
-              ],
-              index: this.currentIndex
-            })
-              this.currentIndex = this.currentIndex + 1;
-              this.restoreAnnotationValues()
-              return;
-            })
-            .catch((e) => {
-              console.log(e);
-              return;
-            });
+          this.$store.commit("changeAnnotation", { data: [
+              this.inputSentences[this.currentIndex].text,
+              { entities: this.tm.exportAsAnnotation() },
+            ],
+            index: this.currentIndex
+          });
+          this.currentIndex += step;
+          this.restoreAnnotationValues()
           }
       } catch (e) {
-        axios
-          .post("/detokenize", { tokens: this.tm.words })
-          .then((res) => {
-            this.$store.commit("addAnnotation", [
-              res.data.text,
-              { entities: this.tm.exportAsAnnotation() },
-            ]);
-            this.currentIndex++;
-            this.tokenizeCurrentSentence();
-          })
-          .catch((e) => {
-            console.log(e);
-          });
+        this.$store.commit("addAnnotation", [
+          this.inputSentences[this.currentIndex].text,
+          { entities: this.tm.exportAsAnnotation() },
+        ]);
+        this.currentIndex += step;
+        this.restoreAnnotationValues();
       }
     },
     goToPreviousSentence(){
@@ -191,8 +174,7 @@ export default {
         console.log(this.currentIndex)
         return;
       }
-      this.currentIndex = this.currentIndex - 1;
-      this.restoreAnnotationValues();
+      this.saveTags(-1);
     },
     async restoreAnnotationValues(){
       await this.tokenizeCurrentSentence();
